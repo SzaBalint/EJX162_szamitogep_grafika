@@ -48,16 +48,16 @@ void handle_game_events(Game* game)
                 game->is_running = false;
                 break;
             case SDL_SCANCODE_W:
-                set_left_pad_speed(&(game->pong), -200);
+                set_left_pad_speed(&(game->pong), -300);
                 break;
             case SDL_SCANCODE_S:
-                set_left_pad_speed(&(game->pong), +200);
+                set_left_pad_speed(&(game->pong), +300);
                 break;
             case SDL_SCANCODE_V:
-                update_ball_size(&(game->pong),+5);
+                incrise_ball_size(&(game->pong.ball),5);
                 break;
             case SDL_SCANCODE_B:
-                update_ball_size(&(game->pong),-5);
+                decrease_ball_size(&(game->pong.ball),5);
                 break;
             default:
                 break;

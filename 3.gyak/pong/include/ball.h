@@ -11,6 +11,7 @@ typedef struct Ball
     float radius;
     float speed_x;
     float speed_y;
+    float increase_speed;
 } Ball;
 
 /**
@@ -29,7 +30,9 @@ void update_ball(Ball* ball, double time);
  */
 void render_ball(Ball* ball);
 
-void set_ball_size(Ball* ball, int radius);
+void increase_ball_size(Ball* ball, int radius);
+
+void decrease_ball_size(Ball* ball, int radius);
 
 void set_ball_position(Ball* ball, float x, float y);
 

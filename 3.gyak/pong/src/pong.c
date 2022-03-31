@@ -9,12 +9,10 @@ void init_pong(Pong* pong, int width, int height)
     init_ball(&(pong->ball), width / 2, height / 2);
 }
 
-void update_ball_size(Pong* pong, int radius)
+/*void update_ball_size(Pong* pong, int radius)
 {
     set_ball_size(&(pong->ball.radius), radius);
-}
-
-//void set_ball_position(Pong* pong,int x, int y);
+}*/
 
 void update_pong(Pong* pong, double time)
 {
@@ -57,9 +55,9 @@ void set_right_pad_speed(Pong* pong, float speed)
 
 void bounce_ball(Pong* pong)
 {
-    if(pong->ball.x - pong->ball.radius <= 0) {
-        /*pong->ball.x = pong->ball.radius + 0;
-        pong->ball.speed_x = -1;*/
+    if(pong->ball.x - pong->ball.radius <= 49) {
+        //pong->ball.x = pong->ball.radius + 0;
+        //pong->ball.speed_x = -1;
         set_ball_position(&(pong->ball),pong->width/2,pong->height/2);
     }
     else if(pong->ball.x - pong->ball.radius < 50 &&
@@ -73,19 +71,19 @@ void bounce_ball(Pong* pong)
         pong->ball.x = pong->ball.radius + 50;
         pong->ball.speed_x *= -1;
     }*/
-    /*if (pong->ball.x + pong->ball.radius > pong->width - 50) {
+   /* if (pong->ball.x + pong->ball.radius > pong->width - 50) { //Eredeti
         pong->ball.x = pong->width - pong->ball.radius - 50;
         pong->ball.speed_x *= -1;
     }*/
 
-    if(pong->ball.x - pong->ball.radius =pong->width-50) {
-        /*pong->ball.x = pong->ball.radius + 0;
-        pong->ball.speed_x = -1;*/
+    if(pong->ball.x - pong->ball.radius >=pong->width-75) {
+       //pong->ball.x = pong->ball.radius + 0;
+       //pong->ball.speed_x = -1;
         set_ball_position(&(pong->ball),pong->width/2,pong->height/2);
     }
-    else if(pong->ball.x - pong->ball.radius >pong->width-50 &&
-            pong->ball.y >= pong->left_pad.y  &&
-            pong->ball.y <= pong->left_pad.y + pong->left_pad.height){
+    else if(pong->ball.x + pong->ball.radius >pong->width-50 &&
+            pong->ball.y >= pong->right_pad.y  &&
+            pong->ball.y <= pong->right_pad.y + pong->right_pad.height){
         pong->ball.x = pong->width - pong->ball.radius - 50;
         pong->ball.speed_x *= -1;
     }
