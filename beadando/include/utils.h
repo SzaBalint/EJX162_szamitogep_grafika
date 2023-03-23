@@ -1,9 +1,6 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#define FALSE 0
-#define TRUE 1
-
 /**
  * GLSL-like three dimensional vector
  */
@@ -29,9 +26,9 @@ typedef struct Color
  */
 typedef struct Material
 {
-    struct Color ambient; 
-    struct Color diffuse; 
-    struct Color specular; 
+    struct Color ambient;
+    struct Color diffuse;
+    struct Color specular;
     float shininess;
 } Material;
 

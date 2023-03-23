@@ -1,29 +1,25 @@
-#include <SOIL/SOIL.h>
-
 #include "texture.h"
 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
-GLuint load_texture(char* filename) {
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	GLuint texture_name;
-	Pixel* image;
-	glGenTextures(1, &texture_name);
+GLuint load_texture(char* filename)
+{
+    SDL_Surface* surface;
+    GLuint texture_name;
 
-	int width;
-	int height;
+    surface = IMG_Load(filename);
 
-	image = (Pixel*)SOIL_load_image(filename, &width, &height, 0, SOIL_LOAD_RGBA); // @suppress("Symbol is not resolved")
+    glGenTextures(1, &texture_name);
 
-	glBindTexture(GL_TEXTURE_2D, texture_name);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, (Pixel*)image);
+    glBindTexture(GL_TEXTURE_2D, texture_name);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, surface->w, surface->h, 0, GL_RGB, GL_UNSIGNED_BYTE, (Pixel*)(surface->pixels));
 
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glEnable(GL_TEXTURE_2D);
-	SOIL_free_image_data(image);
-	return texture_name;
+
+    return texture_name;
 }

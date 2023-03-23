@@ -1,7 +1,7 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include <GL/glut.h>
+#include <GL/gl.h>
 
 typedef GLubyte Pixel[3];
 

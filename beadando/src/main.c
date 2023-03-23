@@ -1,40 +1,21 @@
-#include <GL/glut.h>
-#include <stdlib.h>
+#include "app.h"
+
 #include <stdio.h>
 
-#include "init.h"
-#include "callbacks.h"
+/**
+ * Main function
+ */
+int main(int argc, char* argv[])
+{
+    App app;
 
-//Set the callbacks for GLUT.
-void set_callbacks() {
-	glutDisplayFunc(display);
-	glutReshapeFunc(reshape);
-	glutKeyboardFunc(key_handler);
-	glutKeyboardUpFunc(key_up_handler);
-	glutMouseFunc(mouse_handler);
-	glutMotionFunc(motion_handler);
-	glutIdleFunc(idle);
-	glutSpecialFunc(special_key_handler);
+    init_app(&app, 1500, 1500);
+    while (app.is_running) {
+        handle_app_events(&app);
+        update_app(&app);
+        render_app(&app);
+    }
+    destroy_app(&app);
+
+    return 0;
 }
-
-//Main function
-int main(int argc, char** argv) {
-	
-	glutInit(&argc, argv);
-
-	glutInitWindowSize(1280, 720);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-	
-	int wnd = glutCreateWindow("Shooting range");
-	glutSetWindow(wnd);
-	
-	initialize();
-	init_camera(&camera);
-	init_entities(&world);
-	set_callbacks();
-
-	glutMainLoop();
-	return 0;
-}
-
-
