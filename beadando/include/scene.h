@@ -1,6 +1,7 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include <stdbool.h>
 #include "camera.h"
 #include "texture.h"
 
@@ -12,6 +13,9 @@ typedef struct Scene
     Material material;
     GLuint skybox_texture;
     GLuint awp_texture;
+    GLuint scope_texture;
+    bool is_scoped_in;
+    
 } Scene;
 
 /**

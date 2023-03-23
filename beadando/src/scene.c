@@ -141,7 +141,6 @@ void draw_sniper(Scene scene) {
     //glScalef(world.scene.sniper.size, world.scene.sniper.size, world.scene.sniper.size);
     draw_model(&(scene.awp));
     glPopMatrix();
-    glDisable(GL_BLEND);
 }
 
 

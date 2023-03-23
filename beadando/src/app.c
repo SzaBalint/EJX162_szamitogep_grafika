@@ -69,7 +69,7 @@ void init_opengl()
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 
-    //glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_COLOR_MATERIAL);
 
     /*glEnable(GL_CULL_FACE);*/
 }
@@ -130,6 +130,14 @@ void handle_app_events(App* app)
                 break;
             case SDL_SCANCODE_D:
                 set_camera_side_speed(&(app->camera), -10);
+                break;
+            case SDL_SCANDCODE_Q:
+                if(app->scene.is_scoped_in==false){
+                    is_scoped_in=false;
+                }
+                else{
+                is_scoped_in=true;
+                }
                 break;
             default:
                 break;
@@ -194,6 +202,10 @@ void render_app(App* app)
     set_view(&(app->camera));
     render_scene(&(app->scene));
     glPopMatrix();
+
+    if(app->scene.is_scoped_in){
+        show_scope();
+    }
 
     if (app->camera.is_preview_visible) {
         show_texture_preview();
