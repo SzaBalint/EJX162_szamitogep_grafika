@@ -131,14 +131,14 @@ void handle_app_events(App* app)
             case SDL_SCANCODE_D:
                 set_camera_side_speed(&(app->camera), -10);
                 break;
-            case SDL_SCANDCODE_Q:
+            /*case SDL_SCANDCODE_Q:
                 if(app->scene.is_scoped_in==false){
                     is_scoped_in=false;
                 }
                 else{
                 is_scoped_in=true;
                 }
-                break;
+                break;*/
             default:
                 break;
             }
@@ -203,9 +203,9 @@ void render_app(App* app)
     render_scene(&(app->scene));
     glPopMatrix();
 
-    if(app->scene.is_scoped_in){
+    /*if(app->scene.is_scoped_in){
         show_scope();
-    }
+    }*/
 
     if (app->camera.is_preview_visible) {
         show_texture_preview();

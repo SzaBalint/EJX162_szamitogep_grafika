@@ -80,7 +80,7 @@ void draw_skybox(Scene scene)
     int i, k;
     n_slices = 15;
     n_stacks = 15;
-    radius = 70;
+    radius = 140;
 
     glPushMatrix();
 
@@ -120,11 +120,15 @@ void draw_skybox(Scene scene)
 
 void load_models(Scene* scene){
     load_model(&(scene->awp), "assets/models/awp.obj");
+    load_model(&(scene->target), "assets/models/target.obj");
+
 }
 
 void load_textures(Scene* scene){
     scene->skybox_texture = load_texture("assets/textures/skybox2.jpg");
     scene->awp_texture = load_texture("assets/textures/awp.jpg");
+    scene->target_texture = load_texture("assets/textures/target.png");
+    scene->floor_texture = load_texture("assets/textures/grass.jpg");
 
 }
 
@@ -134,13 +138,73 @@ void draw_sniper(Scene scene) {
     glRotatef(90.0,1.0,0.0,0.0);
     glRotatef(camera.rotation.z, 0, 1, 0);
     glRotatef(camera.rotation.x, 0, 0, 1);
-    glTranslatef(0.8, -2.6, 1.8);
+    glTranslatef(0.8, 7.6, 1.8);
 
     //glMaterialfv(GL_FRONT, GL_AMBIENT, world.scene.sniper.material_ambient);
     glBindTexture(GL_TEXTURE_2D,scene.awp_texture);
     //glScalef(world.scene.sniper.size, world.scene.sniper.size, world.scene.sniper.size);
     draw_model(&(scene.awp));
     glPopMatrix();
+}
+
+void draw_floor(Scene scene) {
+    glPushMatrix();
+    glTranslatef(camera.position.x, camera.position.y, camera.position.z);
+    /*glRotatef(90.0,1.0,0.0,0.0);
+    glRotatef(camera.rotation.z, 0, 0, 0);
+    glRotatef(camera.rotation.x, 0, 0, 0);
+
+    glTranslatef(0.0, 0.0, 0.0);*/
+
+    //glMaterialfv(GL_FRONT, GL_AMBIENT, world.scene.sniper.material_ambient);
+    glBindTexture(GL_TEXTURE_2D,scene.floor_texture);
+    //glScalef(world.scene.sniper.size, world.scene.sniper.size, world.scene.sniper.size);
+    glPopMatrix();
+}
+
+
+void draw_targets(Scene scene){
+    glPushMatrix();
+        glEnable(GL_BLEND);
+        glTranslatef(-40, 50, -1.5);
+        glRotatef(90,1.0,0.0,0.0);
+
+        //glMaterialfv(GL_FRONT, GL_AMBIENT, world.scene.target.material_ambient);
+        glBindTexture(GL_TEXTURE_2D, scene.target_texture);
+        //glScalef(10.0,10.0,10.0);
+        draw_model(&(scene.target));
+    glPopMatrix();
+    glPushMatrix();
+        glEnable(GL_BLEND);
+        glTranslatef(-30, 70, -1.5);
+        glRotatef(90,1.0,0.0,0.0);
+
+        //glMaterialfv(GL_FRONT, GL_AMBIENT, world.scene.target.material_ambient);
+        glBindTexture(GL_TEXTURE_2D, scene.target_texture);
+        //glScalef(scene.sniper.size, scene.target.size, scene.target.size);
+        draw_model(&(scene.target));
+    glPopMatrix();
+    glPushMatrix();
+        glEnable(GL_BLEND);
+        glTranslatef(10, 50, -1.5);
+        glRotatef(90,1.0,0.0,0.0);
+
+        //glMaterialfv(GL_FRONT, GL_AMBIENT, world.scene.target.material_ambient);
+        glBindTexture(GL_TEXTURE_2D, scene.target_texture);
+        //glScalef(world.scene.sniper.size, world.scene.target.size, world.scene.target.size);
+        draw_model(&(scene.target));
+    glPopMatrix();
+    glPushMatrix();
+        glEnable(GL_BLEND);
+        glTranslatef(40, 30, -1.5);
+        glRotatef(90,1.0,0.0,0.0);
+
+        //glMaterialfv(GL_FRONT, GL_AMBIENT, world.scene.target.material_ambient);
+        glBindTexture(GL_TEXTURE_2D, scene.target_texture);
+        //glScalef(world.scene.sniper.size, world.scene.target.size, world.scene.target.size);
+        draw_model(&(scene.target));
+    glPopMatrix();
+    glDisable(GL_BLEND);
 }
 
 
@@ -155,7 +219,8 @@ void render_scene(const Scene* scene)
     draw_origin();
     draw_skybox(*scene);
     draw_sniper(*scene);
-
+    draw_targets(*scene);
+    draw_floor(*scene);
 }
 
 void draw_origin()

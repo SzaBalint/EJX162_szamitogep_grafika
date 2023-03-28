@@ -10,10 +10,13 @@
 typedef struct Scene
 {
     Model awp;
+    Model target;
     Material material;
     GLuint skybox_texture;
     GLuint awp_texture;
     GLuint scope_texture;
+    GLuint target_texture;
+    GLuint floor_texture;
     bool is_scoped_in;
     
 } Scene;
@@ -40,6 +43,10 @@ void load_textures(Scene* scene);
 void draw_skybox(Scene scene);
 
 void draw_sniper(Scene scene);
+
+void draw_targets(Scene scene);
+
+void draw_floor(Scene scene);
 /**
  * Update the scene.
  */

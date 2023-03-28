@@ -8,7 +8,7 @@ void init_camera(Camera* camera)
 {
     camera->position.x = 0.0;
     camera->position.y = 0.0;
-    camera->position.z = 1.0;
+    camera->position.z = 10.0;
     camera->rotation.x = 0.0;
     camera->rotation.y = 0.0;
     camera->rotation.z = 0.0;
@@ -102,7 +102,7 @@ void show_texture_preview()
     glEnable(GL_DEPTH_TEST);
 }
 
-void show_scope(){
+/*void show_scope(){
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDisable(GL_LIGHTING);
@@ -127,4 +127,4 @@ void show_scope(){
 	
 	glEnable(GL_LIGHTING);
 	glEnable(GL_DEPTH_TEST);
-}
+}*/
