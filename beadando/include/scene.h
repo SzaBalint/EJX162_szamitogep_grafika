@@ -52,6 +52,10 @@ void draw_floor(Scene scene);
  */
 void update_scene(Scene* scene);
 
+void update_weapon(Camera* camera);
+
+
+
 /**
  * Render the scene objects.
  */

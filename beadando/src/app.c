@@ -191,7 +191,9 @@ void update_app(App* app)
 
     update_camera(&(app->camera), elapsed_time);
     update_scene(&(app->scene));
+    update_weapon(&(app->camera));
 }
+
 
 void render_app(App* app)
 {

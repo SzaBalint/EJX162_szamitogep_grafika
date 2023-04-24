@@ -4,6 +4,14 @@
 #include <obj/load.h>
 #include <obj/draw.h>
 
+float x=0;
+float y=0;
+float z=0;
+
+float x_rotate=0;
+float y_rotate=0;
+float z_rotate=0;
+
 void init_scene(Scene* scene)
 {
     load_models(scene);
@@ -134,31 +142,33 @@ void load_textures(Scene* scene){
 
 void draw_sniper(Scene scene) {
     glPushMatrix();
-    glTranslatef(camera.position.x, camera.position.y, camera.position.z);
-    glRotatef(90.0,1.0,0.0,0.0);
-    glRotatef(camera.rotation.z, 0, 1, 0);
-    glRotatef(camera.rotation.x, 0, 0, 1);
-    glTranslatef(0.8, 7.6, 1.8);
+    glTranslatef(x-1.8, y-1.0, z-2.8);
+    //glRotatef(90.0,1.0,0.0,0.0);
+    //glTranslatef(0.8, 7.6, 1.8);
+    glRotatef(90.0,1.0, 0.0, 0.0);
 
-    //glMaterialfv(GL_FRONT, GL_AMBIENT, world.scene.sniper.material_ambient);
+    glRotatef(-10, 0, 1, 0);
+    //glRotatef(45, 0, 0, 1);
+    glRotatef(z_rotate, 0, 1, 0);
+    glRotatef(x_rotate, 0, 0, 1);
+
     glBindTexture(GL_TEXTURE_2D,scene.awp_texture);
-    //glScalef(world.scene.sniper.size, world.scene.sniper.size, world.scene.sniper.size);
+
     draw_model(&(scene.awp));
     glPopMatrix();
 }
 
 void draw_floor(Scene scene) {
     glPushMatrix();
-    glTranslatef(camera.position.x, camera.position.y, camera.position.z);
+    glTranslatef(-2.0, -3.0, -3.0);
     /*glRotatef(90.0,1.0,0.0,0.0);
     glRotatef(camera.rotation.z, 0, 0, 0);
     glRotatef(camera.rotation.x, 0, 0, 0);
-
+    
     glTranslatef(0.0, 0.0, 0.0);*/
 
-    //glMaterialfv(GL_FRONT, GL_AMBIENT, world.scene.sniper.material_ambient);
     glBindTexture(GL_TEXTURE_2D,scene.floor_texture);
-    //glScalef(world.scene.sniper.size, world.scene.sniper.size, world.scene.sniper.size);
+ 
     glPopMatrix();
 }
 
@@ -169,9 +179,8 @@ void draw_targets(Scene scene){
         glTranslatef(-40, 50, -1.5);
         glRotatef(90,1.0,0.0,0.0);
 
-        //glMaterialfv(GL_FRONT, GL_AMBIENT, world.scene.target.material_ambient);
         glBindTexture(GL_TEXTURE_2D, scene.target_texture);
-        //glScalef(10.0,10.0,10.0);
+
         draw_model(&(scene.target));
     glPopMatrix();
     glPushMatrix();
@@ -179,9 +188,8 @@ void draw_targets(Scene scene){
         glTranslatef(-30, 70, -1.5);
         glRotatef(90,1.0,0.0,0.0);
 
-        //glMaterialfv(GL_FRONT, GL_AMBIENT, world.scene.target.material_ambient);
         glBindTexture(GL_TEXTURE_2D, scene.target_texture);
-        //glScalef(scene.sniper.size, scene.target.size, scene.target.size);
+
         draw_model(&(scene.target));
     glPopMatrix();
     glPushMatrix();
@@ -189,9 +197,8 @@ void draw_targets(Scene scene){
         glTranslatef(10, 50, -1.5);
         glRotatef(90,1.0,0.0,0.0);
 
-        //glMaterialfv(GL_FRONT, GL_AMBIENT, world.scene.target.material_ambient);
         glBindTexture(GL_TEXTURE_2D, scene.target_texture);
-        //glScalef(world.scene.sniper.size, world.scene.target.size, world.scene.target.size);
+
         draw_model(&(scene.target));
     glPopMatrix();
     glPushMatrix();
@@ -199,10 +206,9 @@ void draw_targets(Scene scene){
         glTranslatef(40, 30, -1.5);
         glRotatef(90,1.0,0.0,0.0);
 
-        //glMaterialfv(GL_FRONT, GL_AMBIENT, world.scene.target.material_ambient);
         glBindTexture(GL_TEXTURE_2D, scene.target_texture);
-        //glScalef(world.scene.sniper.size, world.scene.target.size, world.scene.target.size);
         draw_model(&(scene.target));
+
     glPopMatrix();
     glDisable(GL_BLEND);
 }
@@ -210,6 +216,18 @@ void draw_targets(Scene scene){
 
 void update_scene(Scene* scene)
 {
+
+}
+
+
+void update_weapon(Camera* camera){
+    x=camera->position.x;
+    y=camera->position.y;
+    z=camera->position.z;
+
+    x_rotate=camera->rotation.x;
+    y_rotate=camera->rotation.y;
+    z_rotate=camera->rotation.z;
 }
 
 void render_scene(const Scene* scene)
@@ -227,17 +245,17 @@ void draw_origin()
 {
     glBegin(GL_LINES);
 
-    glColor3f(1, 0, 0);
+    glColor3f(130, 200, 0);
     glVertex3f(0, 0, 0);
-    glVertex3f(1, 0, 0);
+    glVertex3f(100, 0, 0);
 
     glColor3f(0, 1, 0);
     glVertex3f(0, 0, 0);
-    glVertex3f(0, 1, 0);
+    glVertex3f(0, 100, 0);
 
     glColor3f(0, 0, 1);
     glVertex3f(0, 0, 0);
-    glVertex3f(0, 0, 1);
+    glVertex3f(0, 0, 100);
 
     glEnd();
 }
