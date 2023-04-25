@@ -16,7 +16,9 @@ typedef struct Scene
     GLuint awp_texture;
     GLuint scope_texture;
     GLuint target_texture;
+    GLuint help_texture;
     GLuint floor_texture;
+    bool is_help_visible;
     bool is_scoped_in;
     
 } Scene;

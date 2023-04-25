@@ -17,7 +17,7 @@ void init_scene(Scene* scene)
     load_models(scene);
     load_textures(scene);
 
-
+    scene->is_help_visible = false;
     scene->material.ambient.red = 0.0;
     scene->material.ambient.green = 0.0;
     scene->material.ambient.blue = 0.0;
@@ -88,7 +88,7 @@ void draw_skybox(Scene scene)
     int i, k;
     n_slices = 15;
     n_stacks = 15;
-    radius = 140;
+    radius = 200;
 
     glPushMatrix();
 
@@ -135,8 +135,9 @@ void load_models(Scene* scene){
 void load_textures(Scene* scene){
     scene->skybox_texture = load_texture("assets/textures/skybox2.jpg");
     scene->awp_texture = load_texture("assets/textures/awp.jpg");
-    scene->target_texture = load_texture("assets/textures/target.png");
+    scene->target_texture = load_texture("assets/textures/target.jpg");
     scene->floor_texture = load_texture("assets/textures/grass.jpg");
+    scene->help_texture = load_texture("assets/textures/help2.jpg");
 
 }
 
@@ -211,6 +212,37 @@ void draw_targets(Scene scene){
 
     glPopMatrix();
     glDisable(GL_BLEND);
+}
+
+void show_help(GLuint help_texture) {
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_LIGHTING);
+    glDisable(GL_DEPTH_TEST);
+    //glEnable(GL_COLOR_MATERIAL);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glColor3f(1, 1, 1);
+    glBindTexture(GL_TEXTURE_2D, help_texture);
+
+    glBegin(GL_QUADS);
+    glTexCoord2f(0, 0);
+    glVertex3d(-2, 1.5, -3);
+    glTexCoord2f(1, 0);
+    glVertex3d(2, 1.5, -3);
+    glTexCoord2f(1, 1);
+    glVertex3d(2, -1.5, -3);
+    glTexCoord2f(0, 1);
+    glVertex3d(-2, -1.5, -3);
+    glEnd();
+
+
+    //glDisable(GL_COLOR_MATERIAL);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+
 }
 
 

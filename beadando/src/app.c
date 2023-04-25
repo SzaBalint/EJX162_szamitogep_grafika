@@ -25,9 +25,9 @@ void init_app(App* app, int width, int height)
         return;
     }
 
-    int img_flags=IMG_INIT_JPG|IMG_INIT_PNG;
+    //int img_flags=IMG_INIT_JPG|IMG_INIT_PNG;
 
-    inited_loaders = IMG_Init(img_flags);
+    inited_loaders = IMG_Init(IMG_INIT_JPG);
     if (inited_loaders == 0) {
         printf("[ERROR] IMG initialization error: %s\n", IMG_GetError());
         return;
@@ -139,6 +139,13 @@ void handle_app_events(App* app)
                 is_scoped_in=true;
                 }
                 break;*/
+                case SDL_SCANCODE_TAB:
+                        if (!app->scene.is_help_visible) {
+                            app->scene.is_help_visible = true;
+                        } else {
+                            app->scene.is_help_visible = false;
+                        }
+                        break;
             default:
                 break;
             }
@@ -208,6 +215,9 @@ void render_app(App* app)
     /*if(app->scene.is_scoped_in){
         show_scope();
     }*/
+    if (app->scene.is_help_visible) {
+        show_help(app->scene.help_texture); 
+    }
 
     if (app->camera.is_preview_visible) {
         show_texture_preview();
