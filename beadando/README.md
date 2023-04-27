@@ -6,7 +6,7 @@ Ez a fájl tartalmazza a számítógépi grafika beadandóm leírását. A felad
 
 * A kamera szabadon mozgatható a
 
-  * **W, A, S, D gombokkal + **egérrel**
+  * **W, A, S, D** gombokkal + **egérrel**
 
 * Fényerő:
   * **F1** és **F2** gombokkal növelni és csökkenteni
