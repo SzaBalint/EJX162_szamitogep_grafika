@@ -21,6 +21,7 @@ typedef struct App
     Scene scene;
 } App;
 
+void test_with_console(App app);
 /**
  * Initialize the application.
  */

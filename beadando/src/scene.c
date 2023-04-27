@@ -18,6 +18,7 @@ void init_scene(Scene* scene)
     load_textures(scene);
 
     scene->is_help_visible = false;
+    scene->is_scoped_in=false;
     scene->material.ambient.red = 0.0;
     scene->material.ambient.green = 0.0;
     scene->material.ambient.blue = 0.0;
@@ -73,6 +74,23 @@ void set_material(const Material* material)
     glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &(material->shininess));
 }
 
+void load_models(Scene* scene){
+    load_model(&(scene->awp), "assets/models/awp.obj");
+    load_model(&(scene->target), "assets/models/box.obj");
+
+}
+
+void load_textures(Scene* scene){
+    scene->skybox_texture = load_texture("assets/textures/skybox2.jpg");
+    scene->awp_texture = load_texture("assets/textures/awp.jpg");
+    scene->target_texture = load_transparent_texture("assets/textures/box2.png");
+    scene->floor_texture = load_texture("assets/textures/ground.jpg");
+    scene->help_texture = load_texture("assets/textures/help2.jpg");
+    scene->scope_texture = load_transparent_texture("assets/textures/scope.png");
+
+
+}
+
 void draw_skybox(Scene scene)
 {
     glDisable(GL_LIGHTING);
@@ -126,30 +144,47 @@ void draw_skybox(Scene scene)
     glEnable(GL_LIGHTING);
 }
 
-void load_models(Scene* scene){
-    load_model(&(scene->awp), "assets/models/awp.obj");
-    load_model(&(scene->target), "assets/models/target.obj");
+void draw_floor(Scene scene) {
 
-}
+	glDisable(GL_LIGHTING);
+    glBindTexture(GL_TEXTURE_2D, scene.floor_texture);
+    glPushMatrix();
 
-void load_textures(Scene* scene){
-    scene->skybox_texture = load_texture("assets/textures/skybox2.jpg");
-    scene->awp_texture = load_texture("assets/textures/awp.jpg");
-    scene->target_texture = load_texture("assets/textures/target.jpg");
-    scene->floor_texture = load_texture("assets/textures/grass.jpg");
-    scene->help_texture = load_texture("assets/textures/help2.jpg");
+    glRotatef(90,1,0,0);
+    glTranslatef(0,-3,0);
+    glScaled(4.0,4.0,4.0);
+	glColor3f(1, 1, 1);
+    
+	glBegin(GL_QUADS);
 
+	//glTranslatef(0,-100,100);	
+    //glBegin(GL_QUADS);
+		//bl
+        glTexCoord2d(1.0,0);
+		glVertex3f(-40.0,-1,100.0);
+		//br
+        glTexCoord2d(0,0);
+		glVertex3f(40.0,-1,100.0);
+		//tr
+        glTexCoord2d(0,1);
+		glVertex3f(40.0,0.80,-100.0);
+		//tl
+        glTexCoord2d(1.0,1.0);
+		glVertex3f(-40.0,0.80,-100.0);
+	glEnd();
+
+	glPopMatrix();
+	glEnable(GL_LIGHTING);
 }
 
 void draw_sniper(Scene scene) {
     glPushMatrix();
     glTranslatef(x-1.8, y-1.0, z-2.8);
-    //glRotatef(90.0,1.0,0.0,0.0);
     //glTranslatef(0.8, 7.6, 1.8);
     glRotatef(90.0,1.0, 0.0, 0.0);
 
     glRotatef(-10, 0, 1, 0);
-    //glRotatef(45, 0, 0, 1);
+
     glRotatef(z_rotate, 0, 1, 0);
     glRotatef(x_rotate, 0, 0, 1);
 
@@ -159,24 +194,11 @@ void draw_sniper(Scene scene) {
     glPopMatrix();
 }
 
-void draw_floor(Scene scene) {
-    glPushMatrix();
-    glTranslatef(-2.0, -3.0, -3.0);
-    /*glRotatef(90.0,1.0,0.0,0.0);
-    glRotatef(camera.rotation.z, 0, 0, 0);
-    glRotatef(camera.rotation.x, 0, 0, 0);
-    
-    glTranslatef(0.0, 0.0, 0.0);*/
-
-    glBindTexture(GL_TEXTURE_2D,scene.floor_texture);
- 
-    glPopMatrix();
-}
-
-
 void draw_targets(Scene scene){
+    glEnable(GL_BLEND);
     glPushMatrix();
-        glEnable(GL_BLEND);
+       
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glTranslatef(-40, 50, -1.5);
         glRotatef(90,1.0,0.0,0.0);
 
@@ -185,16 +207,19 @@ void draw_targets(Scene scene){
         draw_model(&(scene.target));
     glPopMatrix();
     glPushMatrix();
-        glEnable(GL_BLEND);
+        
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glTranslatef(-30, 70, -1.5);
         glRotatef(90,1.0,0.0,0.0);
 
+        
         glBindTexture(GL_TEXTURE_2D, scene.target_texture);
 
         draw_model(&(scene.target));
     glPopMatrix();
     glPushMatrix();
-        glEnable(GL_BLEND);
+        
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glTranslatef(10, 50, -1.5);
         glRotatef(90,1.0,0.0,0.0);
 
@@ -203,7 +228,8 @@ void draw_targets(Scene scene){
         draw_model(&(scene.target));
     glPopMatrix();
     glPushMatrix();
-        glEnable(GL_BLEND);
+        
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glTranslatef(40, 30, -1.5);
         glRotatef(90,1.0,0.0,0.0);
 
@@ -237,6 +263,38 @@ void show_help(GLuint help_texture) {
     glVertex3d(-2, -1.5, -3);
     glEnd();
 
+    //glDisable(GL_COLOR_MATERIAL);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+
+}
+
+void draw_scope(GLuint scope_texture) {
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_LIGHTING);
+    glDisable(GL_DEPTH_TEST);
+    //glEnable(GL_COLOR_MATERIAL);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glColor3f(1, 1, 1);
+    glBindTexture(GL_TEXTURE_2D, scope_texture);
+
+    glBegin(GL_QUADS);
+    glTexCoord2f(0, 0);
+    glVertex3d(-4, 2.5, -4);
+    glTexCoord2f(1, 0);
+    glVertex3d(4, 2.5, -4);
+    glTexCoord2f(1, 1);
+    glVertex3d(4, -2.5, -4);
+    glTexCoord2f(0, 1);
+    glVertex3d(-4, -2.5, -4);
+    glEnd();
+
 
     //glDisable(GL_COLOR_MATERIAL);
     glEnable(GL_LIGHTING);
@@ -245,12 +303,10 @@ void show_help(GLuint help_texture) {
 
 }
 
-
 void update_scene(Scene* scene)
 {
 
 }
-
 
 void update_weapon(Camera* camera){
     x=camera->position.x;

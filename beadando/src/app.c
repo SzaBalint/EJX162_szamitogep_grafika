@@ -25,9 +25,9 @@ void init_app(App* app, int width, int height)
         return;
     }
 
-    //int img_flags=IMG_INIT_JPG|IMG_INIT_PNG;
+    int img_flags=IMG_INIT_JPG|IMG_INIT_PNG;
 
-    inited_loaders = IMG_Init(IMG_INIT_JPG);
+    inited_loaders = IMG_Init(img_flags);
     if (inited_loaders == 0) {
         printf("[ERROR] IMG initialization error: %s\n", IMG_GetError());
         return;
@@ -131,21 +131,29 @@ void handle_app_events(App* app)
             case SDL_SCANCODE_D:
                 set_camera_side_speed(&(app->camera), -10);
                 break;
-            /*case SDL_SCANDCODE_Q:
-                if(app->scene.is_scoped_in==false){
-                    is_scoped_in=false;
-                }
-                else{
-                is_scoped_in=true;
-                }
-                break;*/
-                case SDL_SCANCODE_TAB:
-                        if (!app->scene.is_help_visible) {
-                            app->scene.is_help_visible = true;
-                        } else {
-                            app->scene.is_help_visible = false;
-                        }
-                        break;
+            case SDL_SCANCODE_F1:
+                        SDL_SetWindowBrightness(app->window, SDL_GetWindowBrightness(app->window) + 0.1);
+                break;
+            case SDL_SCANCODE_F2:
+                        SDL_SetWindowBrightness(app->window, SDL_GetWindowBrightness(app->window) - 0.1);
+                break;
+            case SDL_SCANCODE_TAB:
+                    if (!app->scene.is_help_visible) {
+                        app->scene.is_help_visible = true;
+                    } else {
+                        app->scene.is_help_visible = false;
+                    }
+                    break;
+            case SDL_SCANCODE_G:
+                    if (!app->scene.is_scoped_in) {
+                        app->scene.is_scoped_in = true;
+                    } else {
+                        app->scene.is_scoped_in = false;
+                    }
+                    break; 
+            case SDL_SCANCODE_R:
+                    test_with_console(*app);
+                    break;      
             default:
                 break;
             }
@@ -212,11 +220,13 @@ void render_app(App* app)
     render_scene(&(app->scene));
     glPopMatrix();
 
-    /*if(app->scene.is_scoped_in){
-        show_scope();
-    }*/
+
     if (app->scene.is_help_visible) {
         show_help(app->scene.help_texture); 
+    }
+
+    if (app->scene.is_scoped_in) {
+        draw_scope(app->scene.scope_texture); 
     }
 
     if (app->camera.is_preview_visible) {
@@ -237,4 +247,18 @@ void destroy_app(App* app)
     }
 
     SDL_Quit();
+}
+
+void test_with_console(App app) {
+    printf("%f\n", app.camera.rotation.x);
+    printf("%f\n", app.camera.rotation.y);
+    printf("%f\n", app.camera.rotation.z);
+    printf("\n");
+/*
+    printf("%f\n", app.camera.position.x);
+    printf("%f\n", app.camera.position.y);
+    printf("%f", app.camera.position.z);*/
+/*
+    printf("%d", app.scene.animation_flag);
+*/
 }

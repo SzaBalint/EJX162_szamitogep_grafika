@@ -49,6 +49,7 @@ void draw_sniper(Scene scene);
 void draw_targets(Scene scene);
 
 void draw_floor(Scene scene);
+
 /**
  * Update the scene.
  */
