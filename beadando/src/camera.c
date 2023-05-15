@@ -101,30 +101,3 @@ void show_texture_preview()
     glEnable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
 }
-
-/*void show_scope(){
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glDisable(GL_LIGHTING);
-	glDisable(GL_DEPTH_TEST);
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-	glColor3f(1, 1, 1);
-	glBindTexture(GL_TEXTURE_2D, scene.scope_texture);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0, 0);
-	glVertex3f(-1.66, 0.95, -2);
-	glTexCoord2f(1, 0);
-	glVertex3f(1.66, 0.95, -2);
-	glTexCoord2f(1, 1);
-	glVertex3f(1.66, -1, -2);
-	glTexCoord2f(0, 1);
-	glVertex3f(-1.66, -1, -2);
-	glEnd();
-
-	
-	glEnable(GL_LIGHTING);
-	glEnable(GL_DEPTH_TEST);
-}*/

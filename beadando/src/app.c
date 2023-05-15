@@ -120,16 +120,16 @@ void handle_app_events(App* app)
                 app->is_running = false;
                 break;
             case SDL_SCANCODE_W:
-                set_camera_speed(&(app->camera), 10);
+                set_camera_speed(&(app->camera), 20);
                 break;
             case SDL_SCANCODE_S:
-                set_camera_speed(&(app->camera), -10);
+                set_camera_speed(&(app->camera), -20);
                 break;
             case SDL_SCANCODE_A:
-                set_camera_side_speed(&(app->camera), 10);
+                set_camera_side_speed(&(app->camera), 20);
                 break;
             case SDL_SCANCODE_D:
-                set_camera_side_speed(&(app->camera), -10);
+                set_camera_side_speed(&(app->camera), -20);
                 break;
             case SDL_SCANCODE_F1:
                         SDL_SetWindowBrightness(app->window, SDL_GetWindowBrightness(app->window) + 0.1);
@@ -145,15 +145,23 @@ void handle_app_events(App* app)
                     }
                     break;
             case SDL_SCANCODE_G:
-                    if (!app->scene.is_scoped_in) {
+                    if (!app->scene.is_scoped_in && !app->scene.switched_weapon) {
                         app->scene.is_scoped_in = true;
-                    } else {
+                    } else if(app->scene.is_scoped_in && !app->scene.switched_weapon) {
                         app->scene.is_scoped_in = false;
                     }
                     break; 
             case SDL_SCANCODE_R:
                     test_with_console(*app);
-                    break;      
+                    break;  
+            case SDL_SCANCODE_Q:
+                        if(app->scene.switched_weapon=!(app->scene.switched_weapon)){
+                            app->scene.switched_weapon = true;
+                        }
+                        else{
+                            app->scene.switched_weapon = false;
+                        }
+                    break;              
             default:
                 break;
             }
@@ -205,7 +213,7 @@ void update_app(App* app)
     app->uptime = current_time;
 
     update_camera(&(app->camera), elapsed_time);
-    update_scene(&(app->scene));
+    update_scene(&(app->scene), elapsed_time);
     update_weapon(&(app->camera));
 }
 
@@ -249,6 +257,7 @@ void destroy_app(App* app)
     SDL_Quit();
 }
 
+
 void test_with_console(App app) {
     printf("%f\n", app.camera.rotation.x);
     printf("%f\n", app.camera.rotation.y);
@@ -258,7 +267,5 @@ void test_with_console(App app) {
     printf("%f\n", app.camera.position.x);
     printf("%f\n", app.camera.position.y);
     printf("%f", app.camera.position.z);*/
-/*
-    printf("%d", app.scene.animation_flag);
-*/
+
 }

@@ -11,15 +11,20 @@ typedef struct Scene
 {
     Model awp;
     Model target;
+    Model barrel;
+    Model rifle;
     Material material;
     GLuint skybox_texture;
     GLuint awp_texture;
+    GLuint rifle_texture;
     GLuint scope_texture;
+    GLuint barrel_texture;
     GLuint target_texture;
     GLuint help_texture;
     GLuint floor_texture;
     bool is_help_visible;
     bool is_scoped_in;
+    bool switched_weapon;
     
 } Scene;
 
@@ -46,18 +51,20 @@ void draw_skybox(Scene scene);
 
 void draw_sniper(Scene scene);
 
+void draw_rifle(Scene scene);
+
 void draw_targets(Scene scene);
+
+void draw_barrel(Scene scene);
 
 void draw_floor(Scene scene);
 
 /**
  * Update the scene.
  */
-void update_scene(Scene* scene);
+void update_scene(Scene* scene, double time);
 
 void update_weapon(Camera* camera);
-
-
 
 /**
  * Render the scene objects.

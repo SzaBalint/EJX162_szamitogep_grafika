@@ -19,6 +19,12 @@ void init_scene(Scene* scene)
 
     scene->is_help_visible = false;
     scene->is_scoped_in=false;
+    scene->switched_weapon=false;
+
+    /*scene->animation_path = -2.0f;
+    scene->animation_flag = false;
+    scene->animation_direction = true;*/
+
     scene->material.ambient.red = 0.0;
     scene->material.ambient.green = 0.0;
     scene->material.ambient.blue = 0.0;
@@ -76,16 +82,20 @@ void set_material(const Material* material)
 
 void load_models(Scene* scene){
     load_model(&(scene->awp), "assets/models/awp.obj");
-    load_model(&(scene->target), "assets/models/box.obj");
+    load_model(&(scene->target), "assets/models/duck.obj");
+    load_model(&(scene->barrel), "assets/models/barrel.obj");
+    load_model(&(scene->rifle), "assets/models/rifle.obj");
 
 }
 
 void load_textures(Scene* scene){
     scene->skybox_texture = load_texture("assets/textures/skybox2.jpg");
     scene->awp_texture = load_texture("assets/textures/awp.jpg");
-    scene->target_texture = load_transparent_texture("assets/textures/box2.png");
+    scene->rifle_texture = load_texture("assets/textures/rifle.jpg");
+    scene->target_texture = load_texture("assets/textures/duck.jpg");
+    scene->barrel_texture = load_texture("assets/textures/barrel.jpg");
     scene->floor_texture = load_texture("assets/textures/ground.jpg");
-    scene->help_texture = load_texture("assets/textures/help2.jpg");
+    scene->help_texture = load_texture("assets/textures/help.jpg");
     scene->scope_texture = load_transparent_texture("assets/textures/scope.png");
 
 
@@ -164,13 +174,13 @@ void draw_floor(Scene scene) {
 		glVertex3f(-40.0,-1,100.0);
 		//br
         glTexCoord2d(0,0);
-		glVertex3f(40.0,-1,100.0);
+		glVertex3f(80.0,-1,100.0);
 		//tr
         glTexCoord2d(0,1);
 		glVertex3f(40.0,0.80,-100.0);
 		//tl
         glTexCoord2d(1.0,1.0);
-		glVertex3f(-40.0,0.80,-100.0);
+		glVertex3f(-80.0,0.80,-100.0);
 	glEnd();
 
 	glPopMatrix();
@@ -178,6 +188,26 @@ void draw_floor(Scene scene) {
 }
 
 void draw_sniper(Scene scene) {
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D,scene.awp_texture);
+    glTranslatef(x-1.8, y-1.0, z-2.8);
+    
+    glRotatef(90+y_rotate,1, 0, 0);
+    glRotatef(-10+z_rotate, 0, 1, 0);
+    glRotatef(x_rotate, 0, 0, 1);
+    //glTranslatef(0.8, 7.6, 1.8);
+    /*glRotatef(90.0,1.0, 0.0, 0.0);
+
+    glRotatef(-10, 0, 1, 0);
+
+    glRotatef(z_rotate, 0, 1, 0);
+    glRotatef(x_rotate, 0, 0, 1);*/
+
+    draw_model(&(scene.awp));
+    glPopMatrix();
+}
+
+void draw_rifle(Scene scene) {
     glPushMatrix();
     glTranslatef(x-1.8, y-1.0, z-2.8);
     //glTranslatef(0.8, 7.6, 1.8);
@@ -188,9 +218,9 @@ void draw_sniper(Scene scene) {
     glRotatef(z_rotate, 0, 1, 0);
     glRotatef(x_rotate, 0, 0, 1);
 
-    glBindTexture(GL_TEXTURE_2D,scene.awp_texture);
+    glBindTexture(GL_TEXTURE_2D,scene.rifle_texture);
 
-    draw_model(&(scene.awp));
+    draw_model(&(scene.rifle));
     glPopMatrix();
 }
 
@@ -212,7 +242,6 @@ void draw_targets(Scene scene){
         glTranslatef(-30, 70, -1.5);
         glRotatef(90,1.0,0.0,0.0);
 
-        
         glBindTexture(GL_TEXTURE_2D, scene.target_texture);
 
         draw_model(&(scene.target));
@@ -236,6 +265,44 @@ void draw_targets(Scene scene){
         glBindTexture(GL_TEXTURE_2D, scene.target_texture);
         draw_model(&(scene.target));
 
+    glPopMatrix();
+    glDisable(GL_BLEND);
+}
+
+void draw_barrel(Scene scene){
+    glEnable(GL_BLEND);
+    glPushMatrix();
+       
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glTranslatef(-20, 0, 2.5);
+        glScaled(4.0,4.0,4.0);
+        glRotatef(0,1.0,0.0,0.0);
+
+        glBindTexture(GL_TEXTURE_2D, scene.barrel_texture);
+
+        draw_model(&(scene.barrel));
+    glPopMatrix();
+    glPushMatrix();
+       
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glTranslatef(-30, 0, 2.5);
+        glScaled(4.0,4.0,4.0);
+        glRotatef(0,1.0,0.0,0.0);
+
+        glBindTexture(GL_TEXTURE_2D, scene.barrel_texture);
+
+        draw_model(&(scene.barrel));
+    glPopMatrix();
+    glPushMatrix();
+       
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glTranslatef(-25, 0, 13.5);
+        glScaled(4.0,4.0,4.0);
+        glRotatef(0,1.0,0.0,0.0);
+
+        glBindTexture(GL_TEXTURE_2D, scene.barrel_texture);
+
+        draw_model(&(scene.barrel));
     glPopMatrix();
     glDisable(GL_BLEND);
 }
@@ -303,7 +370,7 @@ void draw_scope(GLuint scope_texture) {
 
 }
 
-void update_scene(Scene* scene)
+void update_scene(Scene* scene,double time)
 {
 
 }
@@ -324,9 +391,16 @@ void render_scene(const Scene* scene)
     set_lighting();
     draw_origin();
     draw_skybox(*scene);
-    draw_sniper(*scene);
+    if(!scene->switched_weapon){
+        draw_sniper(*scene);
+    }
+    else{
+        draw_rifle(*scene);
+    }
     draw_targets(*scene);
     draw_floor(*scene);
+    draw_barrel(*scene);
+    
 }
 
 void draw_origin()
