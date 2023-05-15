@@ -14,6 +14,7 @@ Ez a fájl tartalmazza a számítógépi grafika beadandóm leírását. A felad
 * Egyéb extrák:
   * Az **R** és **T** gombok segítségével lehet váltani a két fegyver között.
   * A **G** gombbal tudjuk használni a scope funkciót
+  * A **H** gomb lenyomására a célpontok mozogni kezdenek.
 
 * Help menü:
   * **Tab** gomb megnyomásával előhozható a fenti *használati utasításokat* előhozó segítség menü
