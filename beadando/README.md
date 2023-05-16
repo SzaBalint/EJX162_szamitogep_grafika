@@ -12,7 +12,7 @@ Ez a fájl tartalmazza a számítógépi grafika beadandóm leírását. A felad
   * **F1** és **F2** gombokkal növelni és csökkenteni
 
 * Egyéb extrák:
-  * Az **R** és **T** gombok segítségével lehet váltani a két fegyver között.
+  * Az **Q** gombok segítségével lehet váltani a két fegyver között.
   * A **G** gombbal tudjuk használni a scope funkciót
   * A **H** gomb lenyomására a célpontok mozogni kezdenek.
 
