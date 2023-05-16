@@ -161,7 +161,10 @@ void handle_app_events(App* app)
                         else{
                             app->scene.switched_weapon = false;
                         }
-                    break;              
+                    break;  
+             case SDL_SCANCODE_H:
+                    app->scene.animation = !app->scene.animation;
+                    break;                     
             default:
                 break;
             }

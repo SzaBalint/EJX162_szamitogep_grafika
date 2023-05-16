@@ -21,9 +21,10 @@ void init_scene(Scene* scene)
     scene->is_scoped_in=false;
     scene->switched_weapon=false;
 
-    /*scene->animation_path = -2.0f;
-    scene->animation_flag = false;
-    scene->animation_direction = true;*/
+    scene->animation_path = -2.0f;
+    scene->animation = false;
+    scene->animation_direction = true;
+    
 
     scene->material.ambient.red = 0.0;
     scene->material.ambient.green = 0.0;
@@ -85,14 +86,16 @@ void load_models(Scene* scene){
     load_model(&(scene->target), "assets/models/duck.obj");
     load_model(&(scene->barrel), "assets/models/barrel.obj");
     load_model(&(scene->rifle), "assets/models/rifle.obj");
+    load_model(&(scene->hare), "assets/models/hare.obj");
 
 }
 
 void load_textures(Scene* scene){
     scene->skybox_texture = load_texture("assets/textures/skybox2.jpg");
     scene->awp_texture = load_texture("assets/textures/awp.jpg");
-    scene->rifle_texture = load_texture("assets/textures/rifle.jpg");
+    scene->rifle_texture = load_texture("assets/textures/rifle.png");
     scene->target_texture = load_texture("assets/textures/duck.jpg");
+    scene->hare_texture = load_texture("assets/textures/hare.jpg");
     scene->barrel_texture = load_texture("assets/textures/barrel.jpg");
     scene->floor_texture = load_texture("assets/textures/ground.jpg");
     scene->help_texture = load_texture("assets/textures/help.jpg");
@@ -223,24 +226,28 @@ void draw_rifle(Scene scene) {
     draw_model(&(scene.rifle));
     glPopMatrix();
 }
-
-void draw_targets(Scene scene){
-    glEnable(GL_BLEND);
+void draw_hare(Scene scene){
     glPushMatrix();
        
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glTranslatef(-40, 50, -1.5);
-        glRotatef(90,1.0,0.0,0.0);
+        glRotatef(-90,0.0,0.0,1.0);
+        glTranslatef(scene.animation_path, -3.0f, 0.0f);
 
-        glBindTexture(GL_TEXTURE_2D, scene.target_texture);
+        glBindTexture(GL_TEXTURE_2D, scene.hare_texture);
 
-        draw_model(&(scene.target));
+        draw_model(&(scene.hare));
     glPopMatrix();
+}
+
+void draw_targets(Scene scene){
+    glEnable(GL_BLEND);
     glPushMatrix();
         
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glTranslatef(-30, 70, -1.5);
-        glRotatef(90,1.0,0.0,0.0);
+        glRotatef(-90,0.0,0.0,1.0);
+        glScaled(1.5,1.5,1.5);
 
         glBindTexture(GL_TEXTURE_2D, scene.target_texture);
 
@@ -250,7 +257,8 @@ void draw_targets(Scene scene){
         
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glTranslatef(10, 50, -1.5);
-        glRotatef(90,1.0,0.0,0.0);
+        glRotatef(-90,0.0,0.0,1.0);
+        glScaled(1.5,1.5,1.5);
 
         glBindTexture(GL_TEXTURE_2D, scene.target_texture);
 
@@ -260,7 +268,8 @@ void draw_targets(Scene scene){
         
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glTranslatef(40, 30, -1.5);
-        glRotatef(90,1.0,0.0,0.0);
+        glRotatef(-90,0.0,0.0,1.0);
+        glScaled(1.5,1.5,1.5);
 
         glBindTexture(GL_TEXTURE_2D, scene.target_texture);
         draw_model(&(scene.target));
@@ -372,6 +381,21 @@ void draw_scope(GLuint scope_texture) {
 
 void update_scene(Scene* scene,double time)
 {
+    if (scene->animation) {
+        if (scene->animation_direction) {
+            scene->animation_path += 4.0f * (float) time;
+            if (scene->animation_path >= 6.0f) {
+                scene->animation = false;
+                scene->animation_direction = false;
+            }
+        } else {
+            scene->animation_path -= 4.0f * (float) time;
+            if (scene->animation_path <= -4.0f) {
+                scene->animation = false;
+                scene->animation_direction = true;
+            }
+        }
+    }
 
 }
 
@@ -391,15 +415,16 @@ void render_scene(const Scene* scene)
     set_lighting();
     draw_origin();
     draw_skybox(*scene);
-    if(!scene->switched_weapon){
+    if(!scene->switched_weapon && !scene->is_scoped_in){
         draw_sniper(*scene);
     }
-    else{
+    else if(scene->switched_weapon){
         draw_rifle(*scene);
     }
     draw_targets(*scene);
     draw_floor(*scene);
     draw_barrel(*scene);
+    draw_hare(*scene);
     
 }
 

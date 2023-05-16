@@ -13,6 +13,7 @@ typedef struct Scene
     Model target;
     Model barrel;
     Model rifle;
+    Model hare;
     Material material;
     GLuint skybox_texture;
     GLuint awp_texture;
@@ -22,6 +23,10 @@ typedef struct Scene
     GLuint target_texture;
     GLuint help_texture;
     GLuint floor_texture;
+    GLuint hare_texture;
+    float animation_path;
+    bool animation;
+    bool animation_direction;
     bool is_help_visible;
     bool is_scoped_in;
     bool switched_weapon;
@@ -54,6 +59,8 @@ void draw_sniper(Scene scene);
 void draw_rifle(Scene scene);
 
 void draw_targets(Scene scene);
+
+void draw_hare(Scene scene);
 
 void draw_barrel(Scene scene);
 
