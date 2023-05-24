@@ -12,6 +12,8 @@ float x_rotate=0;
 float y_rotate=0;
 float z_rotate=0;
 
+
+
 void init_scene(Scene* scene)
 {
     load_models(scene);
@@ -24,6 +26,14 @@ void init_scene(Scene* scene)
     scene->animation_path = -2.0f;
     scene->animation = false;
     scene->animation_direction = true;
+    scene->shooting_animation_path = 0;
+    scene->shooting_animation = false;
+    scene->shooting_animation_direction = true;
+    scene->switch_animation_path = 0;
+    scene->switch_animation = false;
+    scene->switch_animation_direction = true;
+    float timer=0;
+    int isFire=false;
     
 
     scene->material.ambient.red = 0.0;
@@ -170,18 +180,15 @@ void draw_floor(Scene scene) {
     
 	glBegin(GL_QUADS);
 
-	//glTranslatef(0,-100,100);	
-    //glBegin(GL_QUADS);
-		//bl
         glTexCoord2d(1.0,0);
 		glVertex3f(-40.0,-1,100.0);
-		//br
+
         glTexCoord2d(0,0);
 		glVertex3f(80.0,-1,100.0);
-		//tr
+
         glTexCoord2d(0,1);
 		glVertex3f(40.0,0.80,-100.0);
-		//tl
+
         glTexCoord2d(1.0,1.0);
 		glVertex3f(-80.0,0.80,-100.0);
 	glEnd();
@@ -191,35 +198,43 @@ void draw_floor(Scene scene) {
 }
 
 void draw_sniper(Scene scene) {
-    glPushMatrix();
-    glBindTexture(GL_TEXTURE_2D,scene.awp_texture);
-    glTranslatef(x-1.8, y-1.0, z-2.8);
     
-    glRotatef(90+y_rotate,1, 0, 0);
-    glRotatef(-10+z_rotate, 0, 1, 0);
-    glRotatef(x_rotate, 0, 0, 1);
-    //glTranslatef(0.8, 7.6, 1.8);
-    /*glRotatef(90.0,1.0, 0.0, 0.0);
+    float elapsed_time=0;
+    glPushMatrix();
+    
+    glTranslatef(x, y, z);
+    glRotatef(90.0,1.0, 0.0, 0.0);
+    glRotatef(z_rotate,0, 1.0, 0.0);
+    glRotatef(x_rotate,0, 0, 1.0);
+    glTranslatef(0.8, -2.6, 1.8);
 
-    glRotatef(-10, 0, 1, 0);
+    if (scene.isFired == TRUE) {
+		    scene.timer += 200 * elapsed_time;
+		        if (scene.timer > 1) {
+			        scene.isFired = FALSE;
+                    
+		        }
+	    }
+	    else {
+		    if (scene.timer > 0) scene.timer -= 200 * elapsed_time;
+	    }
+     glRotatef(scene.timer * 5, 0, 0.2, 1);
 
-    glRotatef(z_rotate, 0, 1, 0);
-    glRotatef(x_rotate, 0, 0, 1);*/
-
+    glBindTexture(GL_TEXTURE_2D,scene.awp_texture);
     draw_model(&(scene.awp));
     glPopMatrix();
 }
 
 void draw_rifle(Scene scene) {
     glPushMatrix();
-    glTranslatef(x-1.8, y-1.0, z-2.8);
-    //glTranslatef(0.8, 7.6, 1.8);
+    
+    glTranslatef(x, y, z);
     glRotatef(90.0,1.0, 0.0, 0.0);
+    glRotatef(z_rotate,0, 1.0, 0.0);
+    glRotatef(x_rotate,0, 0, 1.0);
+    glTranslatef(0.8, -2.6, 1.8);
 
-    glRotatef(-10, 0, 1, 0);
-
-    glRotatef(z_rotate, 0, 1, 0);
-    glRotatef(x_rotate, 0, 0, 1);
+    glRotatef(scene.shooting_animation_path,0,0,1);
 
     glBindTexture(GL_TEXTURE_2D,scene.rifle_texture);
 
@@ -232,7 +247,7 @@ void draw_hare(Scene scene){
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glTranslatef(-40, 50, -1.5);
         glRotatef(-90,0.0,0.0,1.0);
-        glTranslatef(scene.animation_path, -3.0f, 0.0f);
+        glTranslatef(0.0f,scene.animation_path-3.0f, 0.0f);
 
         glBindTexture(GL_TEXTURE_2D, scene.hare_texture);
 
@@ -248,6 +263,7 @@ void draw_targets(Scene scene){
         glTranslatef(-30, 70, -1.5);
         glRotatef(-90,0.0,0.0,1.0);
         glScaled(1.5,1.5,1.5);
+        glTranslatef(0.0f,scene.animation_path-3.0f, 0.0f);
 
         glBindTexture(GL_TEXTURE_2D, scene.target_texture);
 
@@ -259,6 +275,7 @@ void draw_targets(Scene scene){
         glTranslatef(10, 50, -1.5);
         glRotatef(-90,0.0,0.0,1.0);
         glScaled(1.5,1.5,1.5);
+        glTranslatef(0.0f,scene.animation_path-3.0f, 0.0f);
 
         glBindTexture(GL_TEXTURE_2D, scene.target_texture);
 
@@ -270,6 +287,7 @@ void draw_targets(Scene scene){
         glTranslatef(40, 30, -1.5);
         glRotatef(-90,0.0,0.0,1.0);
         glScaled(1.5,1.5,1.5);
+        glTranslatef(0.0f,scene.animation_path-3.0f, 0.0f);
 
         glBindTexture(GL_TEXTURE_2D, scene.target_texture);
         draw_model(&(scene.target));
@@ -320,7 +338,6 @@ void show_help(GLuint help_texture) {
     glDisable(GL_CULL_FACE);
     glDisable(GL_LIGHTING);
     glDisable(GL_DEPTH_TEST);
-    //glEnable(GL_COLOR_MATERIAL);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -339,7 +356,6 @@ void show_help(GLuint help_texture) {
     glVertex3d(-2, -1.5, -3);
     glEnd();
 
-    //glDisable(GL_COLOR_MATERIAL);
     glEnable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
@@ -352,7 +368,6 @@ void draw_scope(GLuint scope_texture) {
     glDisable(GL_CULL_FACE);
     glDisable(GL_LIGHTING);
     glDisable(GL_DEPTH_TEST);
-    //glEnable(GL_COLOR_MATERIAL);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -362,17 +377,15 @@ void draw_scope(GLuint scope_texture) {
 
     glBegin(GL_QUADS);
     glTexCoord2f(0, 0);
-    glVertex3d(-4, 2.5, -4);
+    glVertex3d(-4, 2, -4);
     glTexCoord2f(1, 0);
-    glVertex3d(4, 2.5, -4);
+    glVertex3d(4, 2, -4);
     glTexCoord2f(1, 1);
-    glVertex3d(4, -2.5, -4);
+    glVertex3d(4, -2, -4);
     glTexCoord2f(0, 1);
-    glVertex3d(-4, -2.5, -4);
+    glVertex3d(-4, -2, -4);
     glEnd();
 
-
-    //glDisable(GL_COLOR_MATERIAL);
     glEnable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
@@ -385,19 +398,52 @@ void update_scene(Scene* scene,double time)
         if (scene->animation_direction) {
             scene->animation_path += 4.0f * (float) time;
             if (scene->animation_path >= 6.0f) {
-                scene->animation = false;
+                //scene->animation = false;
                 scene->animation_direction = false;
             }
         } else {
             scene->animation_path -= 4.0f * (float) time;
             if (scene->animation_path <= -4.0f) {
-                scene->animation = false;
+                //scene->animation = false;
                 scene->animation_direction = true;
             }
         }
     }
+    /*
+        if (scene->shooting_animation_direction) {
+            scene->shooting_animation_path += 4.0 * (float) time*12;
+            if (scene->shooting_animation_path >= 6.0) {
+                //scene->animation2 = false;
+                scene->shooting_animation_direction = false;
+            }
+        } else {
+            scene->shooting_animation_path -= 4.0 * (float) time*5;
+            if (scene->shooting_animation_path <= 0.0) {
+                scene->shooting_animation = false;
+                scene->shooting_animation_direction = true;
+            }
+        }
+    }*/
+
+    /*if (scene->switch_animation) {
+        if (scene->switch_animation_direction) {
+            scene->switch_animation_path += 4.0 * (float) time*12;
+            if (scene->switch_animation_path >= 6.0) {
+                //scene->animation2 = false;
+                scene->switch_animation_direction = false;
+            }
+        } else {
+            scene->switch_animation_path -= 4.0 * (float) time*5;
+            if (scene->switch_animation_path <= 0.0) {
+                scene->switch_animation = false;
+                scene->switch_animation_direction = true;
+            }
+        }
+    }*/
+
 
 }
+
 
 void update_weapon(Camera* camera){
     x=camera->position.x;
@@ -418,7 +464,7 @@ void render_scene(const Scene* scene)
     if(!scene->switched_weapon && !scene->is_scoped_in){
         draw_sniper(*scene);
     }
-    else if(scene->switched_weapon){
+    else if(scene->switched_weapon && !scene->is_scoped_in){
         draw_rifle(*scene);
     }
     draw_targets(*scene);

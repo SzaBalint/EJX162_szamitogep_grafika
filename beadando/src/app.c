@@ -155,16 +155,23 @@ void handle_app_events(App* app)
                     test_with_console(*app);
                     break;  
             case SDL_SCANCODE_Q:
-                        if(app->scene.switched_weapon=!(app->scene.switched_weapon)){
+                        if(!app->scene.is_scoped_in && !app->scene.switched_weapon){
                             app->scene.switched_weapon = true;
                         }
                         else{
                             app->scene.switched_weapon = false;
                         }
                     break;  
-             case SDL_SCANCODE_H:
+            case SDL_SCANCODE_H:
                     app->scene.animation = !app->scene.animation;
-                    break;                     
+                    break; 
+            /*case SDL_SCANCODE_T:
+                    app->scene.shooting_animation = !app->scene.shooting_animation;
+                    break;*/
+            case SDL_SCANCODE_T:
+                    if(!app->scene.isFired)
+                        app->scene.isFired=true;
+                    break;                                     
             default:
                 break;
             }

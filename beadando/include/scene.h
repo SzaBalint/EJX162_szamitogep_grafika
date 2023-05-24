@@ -27,9 +27,17 @@ typedef struct Scene
     float animation_path;
     bool animation;
     bool animation_direction;
+    float shooting_animation_path;
+    bool shooting_animation;
+    bool shooting_animation_direction;
     bool is_help_visible;
     bool is_scoped_in;
     bool switched_weapon;
+    float switch_animation_path;
+    bool switch_animation;
+    bool switch_animation_direction;
+    float timer;
+    int isFired;
     
 } Scene;
 
