@@ -155,20 +155,16 @@ void handle_app_events(App* app)
                     test_with_console(*app);
                     break;  
             case SDL_SCANCODE_Q:
-                        if(!app->scene.is_scoped_in && !app->scene.switched_weapon){
-                            app->scene.switched_weapon = true;
-                        }
-                        else{
-                            app->scene.switched_weapon = false;
-                        }
+                        if(!app->scene.is_scoped_in)
+                            app->scene.switch_animation = true;
                     break;  
             case SDL_SCANCODE_H:
                     app->scene.animation = !app->scene.animation;
                     break; 
-            case SDL_SCANCODE_T:
+            /*case SDL_SCANCODE_T:
                     app->scene.shooting_animation = !app->scene.shooting_animation;
-                    break;
-            case SDL_SCANCODE_Z:
+                    break;*/
+            case SDL_SCANCODE_T:
                     if(!app->scene.isFired)
                         app->scene.isFired=true;
                     break;                                     
@@ -269,11 +265,15 @@ void destroy_app(App* app)
 
 
 void test_with_console(App app) {
-    printf("%f\n", app.camera.rotation.x);
+    /*printf("%f\n", app.camera.rotation.x);
     printf("%f\n", app.camera.rotation.y);
     printf("%f\n", app.camera.rotation.z);
-    printf("\n");
-/*
+    printf("\n");*/
+    /*printf("%d\n", app.scene.is_scoped_in);
+    printf("%d\n", app.scene.switched_weapon);
+    printf("%d\n", app.scene.switch_animation);*/
+    printf("%f\n", app.scene.switch_rotate);
+/*  
     printf("%f\n", app.camera.position.x);
     printf("%f\n", app.camera.position.y);
     printf("%f", app.camera.position.z);*/
