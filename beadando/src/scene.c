@@ -32,8 +32,8 @@ void init_scene(Scene* scene)
     scene->switch_animation_path = 0;
     scene->switch_animation = false;
     scene->switch_animation_direction = true;
-    float timer=0;
-    int isFire=false;
+    scene->timer=0;
+    scene->isFired=false;
     
 
     scene->material.ambient.red = 0.0;
@@ -103,7 +103,7 @@ void load_models(Scene* scene){
 void load_textures(Scene* scene){
     scene->skybox_texture = load_texture("assets/textures/skybox2.jpg");
     scene->awp_texture = load_texture("assets/textures/awp.jpg");
-    scene->rifle_texture = load_texture("assets/textures/rifle.png");
+    scene->rifle_texture = load_transparent_texture("assets/textures/rifle.png");
     scene->target_texture = load_texture("assets/textures/duck.jpg");
     scene->hare_texture = load_texture("assets/textures/hare.jpg");
     scene->barrel_texture = load_texture("assets/textures/barrel.jpg");
@@ -199,7 +199,6 @@ void draw_floor(Scene scene) {
 
 void draw_sniper(Scene scene) {
     
-    float elapsed_time=0;
     glPushMatrix();
     
     glTranslatef(x, y, z);
@@ -208,17 +207,7 @@ void draw_sniper(Scene scene) {
     glRotatef(x_rotate,0, 0, 1.0);
     glTranslatef(0.8, -2.6, 1.8);
 
-    if (scene.isFired == TRUE) {
-		    scene.timer += 200 * elapsed_time;
-		        if (scene.timer > 1) {
-			        scene.isFired = FALSE;
-                    
-		        }
-	    }
-	    else {
-		    if (scene.timer > 0) scene.timer -= 200 * elapsed_time;
-	    }
-     glRotatef(scene.timer * 5, 0, 0.2, 1);
+    glRotatef(scene.timer * 5, 0, 0.2, 1);
 
     glBindTexture(GL_TEXTURE_2D,scene.awp_texture);
     draw_model(&(scene.awp));
@@ -409,11 +398,22 @@ void update_scene(Scene* scene,double time)
             }
         }
     }
+
+    if (scene->isFired == TRUE) {
+		    scene->timer += 200 * time;
+		        if (scene->timer > 1) {
+			        scene->isFired = FALSE;
+                    
+		        }
+	    }
+	    else {
+		    if (scene->timer > 0) scene->timer -= 200 * time;
+	    }
     /*
         if (scene->shooting_animation_direction) {
             scene->shooting_animation_path += 4.0 * (float) time*12;
             if (scene->shooting_animation_path >= 6.0) {
-                //scene->animation2 = false;
+
                 scene->shooting_animation_direction = false;
             }
         } else {
@@ -423,7 +423,7 @@ void update_scene(Scene* scene,double time)
                 scene->shooting_animation_direction = true;
             }
         }
-    }*/
+    */
 
     /*if (scene->switch_animation) {
         if (scene->switch_animation_direction) {

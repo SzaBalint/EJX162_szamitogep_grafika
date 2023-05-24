@@ -165,10 +165,10 @@ void handle_app_events(App* app)
             case SDL_SCANCODE_H:
                     app->scene.animation = !app->scene.animation;
                     break; 
-            /*case SDL_SCANCODE_T:
-                    app->scene.shooting_animation = !app->scene.shooting_animation;
-                    break;*/
             case SDL_SCANCODE_T:
+                    app->scene.shooting_animation = !app->scene.shooting_animation;
+                    break;
+            case SDL_SCANCODE_Z:
                     if(!app->scene.isFired)
                         app->scene.isFired=true;
                     break;                                     

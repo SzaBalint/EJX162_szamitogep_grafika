@@ -37,7 +37,7 @@ typedef struct Scene
     bool switch_animation;
     bool switch_animation_direction;
     float timer;
-    int isFired;
+    bool isFired;
     
 } Scene;
 
