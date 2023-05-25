@@ -15,6 +15,7 @@ Ez a fájl tartalmazza a számítógépi grafika beadandóm leírását. A felad
   * Az **Q** gombok segítségével lehet váltani a két fegyver között.
   * A **G** gombbal tudjuk használni a scope funkciót
   * A **H** gomb lenyomására a célpontok mozogni kezdenek.
+  * A **T** gombbal lövés animáció indul.
 
 * Help menü:
   * **Tab** gomb megnyomásával előhozható a fenti *használati utasításokat* előhozó segítség menü
