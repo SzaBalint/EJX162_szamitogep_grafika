@@ -27,9 +27,6 @@ typedef struct Scene
     float animation_path;
     bool animation;
     bool animation_direction;
-    float shooting_animation_path;
-    bool shooting_animation;
-    bool shooting_animation_direction;
     bool is_help_visible;
     bool is_scoped_in;
     bool switched_weapon;
@@ -45,47 +42,62 @@ typedef struct Scene
  * Initialize the scene by loading models.
  */
 void init_scene(Scene* scene);
-
 /**
  * Set the lighting of the scene.
  */
 void set_lighting();
-
 /**
  * Set the current material.
  */
 void set_material(const Material* material);
-
-void load_models(Scene* scene);
-
-void load_textures(Scene* scene);
-
-void draw_skybox(Scene scene);
-
-void draw_sniper(Scene scene);
-
-void draw_rifle(Scene scene);
-
-void draw_targets(Scene scene);
-
-void draw_hare(Scene scene);
-
-void draw_barrel(Scene scene);
-
-void draw_floor(Scene scene);
-
 /**
- * Update the scene.
+ * Load models
+ */
+void load_models(Scene* scene);
+/**
+ * Load textures
+ */
+void load_textures(Scene* scene);
+/**
+ * Draw skybox over the map
+ */
+void draw_skybox(Scene scene);
+/**
+ * Draw sniper model,texture and add positions
+ */
+void draw_sniper(Scene scene);
+/**
+ * Draw rifle model,texture and add positions
+ */
+void draw_rifle(Scene scene);
+/**
+ * Draw target models,textures and add positions
+ */
+void draw_targets(Scene scene);
+/**
+ * Draw hare model,texture and add positions
+ */
+void draw_hare(Scene scene);
+/**
+ * Draw barrel models,textures and add positions
+ */
+void draw_barrel(Scene scene);
+/**
+ * Draw skybox under the map
+ */
+void draw_floor(Scene scene);
+/**
+ * Contains the animations
  */
 void update_scene(Scene* scene, double time);
-
+/**
+ * Fix weapon position
+ */
 void update_weapon(Camera* camera);
-
 /**
  * Render the scene objects.
  */
 void render_scene(const Scene* scene);
-
 /**
  * Draw the origin of the world coordinate system.
  */
